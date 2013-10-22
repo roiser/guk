@@ -88,13 +88,13 @@ class guk :
     packet2.seek(0)
     profpdf = PdfFileReader(packet2)
     
-    packet3 = StringIO.StringIO()
-    can3 = canvas.Canvas(packet3, pagesize=letter)
-    can3.setFontSize(8)
-    can3.drawString(gukhor, gukver, guk)
-    can3.save()
-    packet3.seek(0)
-    gukpdf = PdfFileReader(packet3)
+    # packet3 = StringIO.StringIO()
+    # can3 = canvas.Canvas(packet3, pagesize=letter)
+    # can3.setFontSize(8)
+    # can3.drawString(gukhor, gukver, guk)
+    # can3.save()
+    # packet3.seek(0)
+    # gukpdf = PdfFileReader(packet3)
 
     packet4 = StringIO.StringIO()
     can4 = canvas.Canvas(packet4, pagesize=letter)
@@ -123,7 +123,7 @@ class guk :
     page = existing_pdf.getPage(0)
     page.mergePage(transpdf.getPage(0))
     page.mergePage(profpdf.getPage(0))
-    page.mergePage(gukpdf.getPage(0))    
+    #page.mergePage(gukpdf.getPage(0))    
     page.mergePage(circle.getPage(0))
     if self.lang != 'dt' : page.mergePage(wordpdf.getPage(0))
     output.addPage(page)
@@ -133,15 +133,15 @@ class guk :
     outputStream.close()
 #    picfile.close()
 
-  def readInputFile(self, file, guk) :
+  def readInputFile(self, file): #, guk) :
     f = open(file, 'r')
     for l in f.readlines():
       if l[-1] == '\n' : l = l[:-1]
       ls = l.split(',')
-      ls.append(guk)
+      #ls.append(guk)
       if self.data.has_key(ls[1]) : print "key exists", ls[1], self.data[ls[1]]['guk'], guk
       self.data[ls[1]] = {}
-      self.data[ls[1]]['guk'] = guk
+      self.data[ls[1]]['guk'] = ls[7]
       self.data[ls[1]]['prof'] = ls[0]
       self.data[ls[1]]['dt'] = {'word': ls[1], 'desc':ls[4]}
       self.data[ls[1]]['fr'] = {'word': ls[2], 'desc':ls[5]}
@@ -149,11 +149,13 @@ class guk :
     f.close()
 
   def prepareWork(self) :
-    for g in self.guks :
-      gstr = 'guk' + str(g)
-      gdir = self.curd + os.sep + gstr + os.sep
-      wordfile = gdir + 'guk-'+gstr+'.csv'
-      self.readInputFile(wordfile, gstr)
+    f = self.curd + os.sep + 'guk.csv'
+    self.readInputFile(f)
+    # for g in self.guks :
+    #   gstr = 'guk' + str(g)
+    #   gdir = self.curd + os.sep + gstr + os.sep
+    #   wordfile = gdir + 'guk-'+gstr+'.csv'
+    #   self.readInputFile(wordfile, gstr)
 
   def producePictures(self):
     for name in self.data.keys() :
@@ -164,7 +166,8 @@ class guk :
         guk = self.data[name]['guk']
         trans = self.data[name][self.lang]['desc']
         word = self.data[name][self.lang]['word']
-        srcdir = os.path.realpath(os.curdir) + os.sep + guk + os.sep + 'pdf' + os.sep
+#        srcdir = os.path.realpath(os.curdir) + os.sep + guk + os.sep + 'pdf' + os.sep
+        srcdir = os.path.realpath(os.curdir) + os.sep + 'pdf' + os.sep
         picfile =  name + '.pdf'
         srcfile = srcdir+picfile
         dstfile = self.tempdir+picfile
