@@ -1,5 +1,11 @@
 *.py[cod]
 
+# guk
+guks
+pdf
+
+*~
+
 # C extensions
 *.so
 
