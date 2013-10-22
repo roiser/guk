@@ -3,7 +3,7 @@
 # guk
 guks
 pdf
-
+*.pdf
 *~
 
 # C extensions
