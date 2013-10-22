@@ -1,4 +1,4 @@
-import StringIO, codecs, tempfile, os, shutil, datetime
+import StringIO, codecs, tempfile, os, shutil, datetime, sys
 from pyPdf import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -49,7 +49,7 @@ class guk :
                      ' ' : [1,1,1]
                      }
     self.lang = 'dt'
-    self.langs = ['fr', 'dt'] #['fr', 'dt']
+    self.langs = ['fr', 'dt', 'en']
     self.tempdir = tempfile.mkdtemp(prefix='guk', suffix='tmp') + os.sep
     self.debug = False
     self.inversedata = {}
@@ -178,7 +178,8 @@ class guk :
           print 'Cannot find file', picfile
 
   def concatPdfs(self) :
-    print 'x'
+    sys.stdout.write('.')
+    sys.stdout.flush()
     finalpdf = 'guk-%s-%s.pdf' % (self.lang, self.today)
     finalfile = os.path.realpath(os.curdir) + os.sep + finalpdf
     outputpdf = PdfFileWriter()
@@ -225,8 +226,9 @@ class guk :
       self.producePictures()
       self.concatPdfs()
     self.tearDown()
+    print
 #    self.checkConsistency()
-    
+  
 
 
 if __name__ == '__main__' : guk().run()
